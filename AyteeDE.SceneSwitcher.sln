@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AyteeDE.SceneSwitcher", "AyteeDE.SceneSwitcher\AyteeDE.SceneSwitcher.csproj", "{15AC1720-F158-439A-951E-0B21B8912EB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AyteeDE.SceneSwitcher.MAUIApp", "AyteeDE.SceneSwitcher.MAUIApp\AyteeDE.SceneSwitcher.MAUIApp.csproj", "{5817FF52-14BE-4177-8D9D-0DCCE8233AE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{15AC1720-F158-439A-951E-0B21B8912EB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15AC1720-F158-439A-951E-0B21B8912EB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15AC1720-F158-439A-951E-0B21B8912EB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5817FF52-14BE-4177-8D9D-0DCCE8233AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5817FF52-14BE-4177-8D9D-0DCCE8233AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5817FF52-14BE-4177-8D9D-0DCCE8233AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5817FF52-14BE-4177-8D9D-0DCCE8233AE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
