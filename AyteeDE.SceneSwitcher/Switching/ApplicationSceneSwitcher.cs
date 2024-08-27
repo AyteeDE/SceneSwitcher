@@ -37,7 +37,7 @@ public class ApplicationSceneSwitcher
     public async void PollingTick(object stateInfo)
     {
         System.Console.WriteLine("Tick...");
-        var matchingScene = await FindMatchingScene();
+        var matchingScene = FindMatchingScene();
         if(matchingScene != null && !matchingScene.Equals(_currentScene))
         {
             Console.WriteLine($"Matching scene {matchingScene.Scene.Name} found, switching...");
@@ -51,7 +51,7 @@ public class ApplicationSceneSwitcher
         _currentScene = targetScene;
         var success = await _adapter.SetCurrentProgramScene(targetScene.Scene);
     }
-    private async Task<ApplicationSceneSwitcherScene> FindMatchingScene()
+    private ApplicationSceneSwitcherScene FindMatchingScene()
     {
         foreach(var scene in _applicationSceneSwitcherConfig.Scenes.OrderBy(s => s.Priority))
         {
