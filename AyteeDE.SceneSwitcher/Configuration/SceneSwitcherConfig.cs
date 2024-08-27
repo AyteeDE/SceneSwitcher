@@ -1,4 +1,5 @@
-using System;
+using AyteeDE.SceneSwitcher.Configuration.Application;
+using AyteeDE.SceneSwitcher.Configuration.Timer;
 using AyteeDE.StreamAdapter.Core.Configuration;
 
 namespace AyteeDE.SceneSwitcher.Configuration;

@@ -1,9 +1,9 @@
 using System;
 using AyteeDE.StreamAdapter.Core.Entities;
 
-namespace AyteeDE.SceneSwitcher.Configuration;
+namespace AyteeDE.SceneSwitcher.Configuration.Timer;
 
-public class TimerSceneSwitcherScenesConfig
+public class TimerSceneSwitcherScene
 {
     public Scene Scene { get; set; }
     public int Position { get; set; } = 0;

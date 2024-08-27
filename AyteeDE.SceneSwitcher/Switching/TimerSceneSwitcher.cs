@@ -1,22 +1,18 @@
-using System;
-using AyteeDE.SceneSwitcher.Configuration;
+using AyteeDE.SceneSwitcher.Configuration.Timer;
 using AyteeDE.StreamAdapter.Core.Communication;
 using AyteeDE.StreamAdapter.Core.Configuration;
-using AyteeDE.StreamAdapter.Core.Entities;
 
 namespace AyteeDE.SceneSwitcher.Switching;
 
 public class TimerSceneSwitcher
 {
-    private EndpointConfiguration _endpointConfiguration;
     private TimerSceneSwitcherConfig _timerSceneSwitcherConfig;
-    private Timer _timer { get; set; }
+    private Timer _timer;
     private IStreamAdapter _adapter;
     public TimerSceneSwitcher(EndpointConfiguration endpointConfiguration, TimerSceneSwitcherConfig timerSceneSwitcherConfig)
     {
-        _endpointConfiguration = endpointConfiguration;
         _timerSceneSwitcherConfig = timerSceneSwitcherConfig;
-        _adapter = AdapterFactory.CreateInstance(_endpointConfiguration);
+        _adapter = AdapterFactory.CreateInstance(endpointConfiguration);
     }
     public bool IsTimerRunning
     {
@@ -47,8 +43,8 @@ public class TimerSceneSwitcher
         await _adapter.SetCurrentProgramScene(next.Scene);
         _currentScene = next;
     }
-    private TimerSceneSwitcherScenesConfig _currentScene;
-    private TimerSceneSwitcherScenesConfig GetNextScene()
+    private TimerSceneSwitcherScene _currentScene;
+    private TimerSceneSwitcherScene GetNextScene()
     {
         if(_timerSceneSwitcherConfig.IsRandom)
         {
@@ -59,14 +55,14 @@ public class TimerSceneSwitcher
             return GetNextSortedScene();
         }
     }
-    private async Task<TimerSceneSwitcherScenesConfig> TryGetCurrentSceneOnStart()
+    private async Task<TimerSceneSwitcherScene> TryGetCurrentSceneOnStart()
     {
         var scene = await _adapter.GetCurrentProgramScene();
         var match = _timerSceneSwitcherConfig.Scenes.FirstOrDefault(s => s.Scene.Equals(scene));
         return match;
     }
     private Random _random = new Random();
-    private TimerSceneSwitcherScenesConfig GetNextRandomScene(int currentIterations = 0)
+    private TimerSceneSwitcherScene GetNextRandomScene(int currentIterations = 0)
     {
         int rngPosition = _random.Next(_timerSceneSwitcherConfig.Scenes.Count);
         var scene = _timerSceneSwitcherConfig.Scenes[rngPosition];
@@ -81,7 +77,7 @@ public class TimerSceneSwitcher
             return GetNextRandomScene(currentIterations + 1);
         }
     }
-    private TimerSceneSwitcherScenesConfig GetNextSortedScene()
+    private TimerSceneSwitcherScene GetNextSortedScene()
     {
         int currentPosition = _currentScene == null ? -1 : _currentScene.Position;
         var next = _timerSceneSwitcherConfig.Scenes.OrderBy(s => s.Position).FirstOrDefault(s => s.Position > currentPosition);
