@@ -1,28 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AyteeDE.SceneSwitcher.MAUIApp.MainPage">
+             x:Class="AyteeDE.SceneSwitcher.MAUIApp.Pages.SettingsPage"
+             Title="Settings">
     <ScrollView>
         <VerticalStackLayout
             HorizontalOptions="Center"
             VerticalOptions="Center"
             Spacing="75">
             <Button
-                Text="App Switching"
+                Text="Connection"
                 FontSize="Title"
                 WidthRequest="500"
-                IsEnabled="{Binding HasValidEndpointConfiguration}"/>
+                Clicked="ConnectionSettings_Clicked"/>
             <Button
-                Text="Timer Switching"
+                Text="Application Switcher"
                 FontSize="Title"
-                WidthRequest="500"
-                IsEnabled="{Binding HasValidEndpointConfiguration}"/>
+                WidthRequest="500"/>
             <Button
-                Text="Settings"
+                Text="Timer Switcher" 
                 FontSize="Title"
-                WidthRequest="500"
-                Clicked="Settings_Clicked"/>
+                WidthRequest="500"/>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

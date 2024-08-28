@@ -1,4 +1,10 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Text.Json;
+using AyteeDE.SceneSwitcher.Configuration;
+using AyteeDE.SceneSwitcher.MAUIApp.ViewModels;
+
 namespace AyteeDE.SceneSwitcher.MAUIApp;
 
 public partial class App : Application
@@ -6,7 +12,8 @@ public partial class App : Application
 	public App()
 	{
 		InitializeComponent();
-
+		ConfigurationManager configurationManager = new ConfigurationManager();
+		configurationManager.TryLoadConfig();
 		MainPage = new AppShell();
 	}
 
@@ -23,4 +30,6 @@ public partial class App : Application
 		window.MinimumHeight = newHeight;
 		return window;
     }
+
+	
 }
