@@ -7,21 +7,25 @@
         <VerticalStackLayout
             HorizontalOptions="Center"
             VerticalOptions="Center"
-            Spacing="50">
-            <Picker 
-                ItemsSource="{Binding ConnectionTypeCollection}"
-                SelectedItem="{Binding ConnectionType}"/>
+            Spacing="20">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Connection type" />
+                <Picker 
+                    ItemsSource="{Binding ConnectionTypeCollection}"
+                    SelectedItem="{Binding ConnectionType}"
+                    WidthRequest="300"/>
+            </VerticalStackLayout>
             <VerticalStackLayout Spacing="10">
                 <Label Text="Hostname / IP"/>
                 <Entry 
                     Text="{Binding Host}"
-                    WidthRequest="500"/>   
+                    WidthRequest="300"/>   
             </VerticalStackLayout>
             <VerticalStackLayout Spacing="10">
                 <Label Text="Port"/>
                 <Entry
                     Text="{Binding Port}"
-                    WidthRequest="500"/>
+                    WidthRequest="300"/>
             </VerticalStackLayout> 
             <HorizontalStackLayout Spacing="50">
                 <Label Text="Authentication Enabled" VerticalOptions="Center"/>
@@ -32,12 +36,14 @@
                 <Label Text="Token / Password"/>
                 <Entry
                     Text="{Binding Token}"
-                    WidthRequest="500"
+                    IsPassword="True"
+                    WidthRequest="300"
                     IsEnabled="{Binding AuthenticationEnabled}"/>
             </VerticalStackLayout>
             <Button 
                 Text="Validate &amp; Save" 
                 FontSize="Title"
+                WidthRequest="300"
                 Command="{Binding SaveCommand}"/>
         </VerticalStackLayout>    
     </ScrollView>

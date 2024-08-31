@@ -10,17 +10,17 @@
             <Button
                 Text="App Switching"
                 FontSize="Title"
-                WidthRequest="500"
+                WidthRequest="300"
                 IsEnabled="{Binding HasValidEndpointConfiguration}"/>
             <Button
                 Text="Timer Switching"
                 FontSize="Title"
-                WidthRequest="500"
+                WidthRequest="300"
                 IsEnabled="{Binding HasValidEndpointConfiguration}"/>
             <Button
                 Text="Settings"
                 FontSize="Title"
-                WidthRequest="500"
+                WidthRequest="300"
                 Clicked="Settings_Clicked"/>
         </VerticalStackLayout>
     </ScrollView>

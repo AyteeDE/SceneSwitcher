@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AyteeDE.SceneSwitcher.MAUIApp.Pages.ApplicationSettingsPage"
+             Title="Settings / Application Switcher">
+    <ScrollView>
+        <VerticalStackLayout
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Spacing="20">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Polling interval (ms)" />
+                <Entry
+                    Text="{Binding PollingInterval}"
+                    WidthRequest="300" />
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Rules" />
+                <ListView
+                    WidthRequest="300"
+                    ItemsSource="{Binding Scenes}"
+                    SelectedItem="{Binding EditScene}"
+                    SelectionMode="Single" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell
+                                Text="{Binding ProcessNameOrDefaultView}"
+                                Detail="{Binding Scene.Name}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                    <Button
+                        Text="+"
+                        FontSize="Title"
+                        WidthRequest="60"
+                        Command="{Binding AddNewRuleCommand}" />
+                    <Button
+                        Text="-"
+                        FontSize="Title"
+                        WidthRequest="60"
+                        Command="{Binding RemoveRuleCommand}"
+                        IsEnabled="{Binding IsEditEnabled}" />
+                    <Button
+                        Text="↑"
+                        FontSize="Title"
+                        WidthRequest="60"
+                        Command="{Binding MoveRuleUpCommand}"
+                        IsEnabled="{Binding IsEditEnabled}" />
+                    <Button
+                        Text="↓"
+                        FontSize="Title"
+                        WidthRequest="60"
+                        Command="{Binding MoveRuleDownCommand}"
+                        IsEnabled="{Binding IsEditEnabled}" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Scene" />
+                <Picker 
+                    ItemsSource="{Binding AdapterScenes}"
+                    SelectedItem="{Binding EditScene.Scene}"
+                    SelectedIndexChanged="Scene_SelectedIndexChanged"
+                    WidthRequest="300"
+                    IsEnabled="{Binding IsEditEnabled}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Process name" />
+                <Entry
+                    Text="{Binding EditScene.ProcessName}"
+                    WidthRequest="300"
+                    IsEnabled="{Binding IsEditEnabled}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Switching delay (ms)" />
+                <Entry
+                    Text="{Binding EditScene.SwitchingDelay}"
+                    WidthRequest="300"
+                    IsEnabled="{Binding IsEditEnabled}" />
+            </VerticalStackLayout>
+            <HorizontalStackLayout Spacing="50">
+                <Label Text="Needs focus" WidthRequest="150" VerticalOptions="Center" />
+                <CheckBox 
+                    IsChecked="{Binding EditScene.NeedsFocus}"
+                    IsEnabled="{Binding IsEditEnabled}" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="50">
+                <Label Text="Use window title" WidthRequest="150" VerticalOptions="Center" />
+                <CheckBox 
+                    IsChecked="{Binding EditScene.UseWindowTitleInsteadOfProcessName}"
+                    IsEnabled="{Binding IsEditEnabled}" />
+            </HorizontalStackLayout>
+            <Button
+                Text="Save"
+                FontSize="Title"
+                WidthRequest="300"
+                Command="{Binding SaveCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

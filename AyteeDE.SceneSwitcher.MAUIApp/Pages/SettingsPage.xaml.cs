@@ -12,4 +12,8 @@ public partial class SettingsPage : ContentPage
 	{
 		Navigation.PushAsync(new ConnectionSettingsPage());
 	}
+	public void ApplicationSettings_Clicked(Object sender, EventArgs e)
+	{
+		Navigation.PushAsync(new ApplicationSettingsPage());
+	}
 }

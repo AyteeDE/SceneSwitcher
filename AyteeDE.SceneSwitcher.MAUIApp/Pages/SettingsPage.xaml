@@ -11,16 +11,17 @@
             <Button
                 Text="Connection"
                 FontSize="Title"
-                WidthRequest="500"
+                WidthRequest="300"
                 Clicked="ConnectionSettings_Clicked"/>
             <Button
                 Text="Application Switcher"
                 FontSize="Title"
-                WidthRequest="500"/>
+                WidthRequest="300"
+                Clicked="ApplicationSettings_Clicked"/>
             <Button
                 Text="Timer Switcher" 
                 FontSize="Title"
-                WidthRequest="500"/>
+                WidthRequest="300"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

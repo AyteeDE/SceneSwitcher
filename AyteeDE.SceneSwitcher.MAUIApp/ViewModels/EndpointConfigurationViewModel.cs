@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using AyteeDE.StreamAdapter.Core.Communication;
 using AyteeDE.StreamAdapter.Core.Configuration;
 
 namespace AyteeDE.SceneSwitcher.MAUIApp.ViewModels;
@@ -50,6 +51,7 @@ public class EndpointConfigurationViewModel : INotifyPropertyChanged
                     _config.ConnectionType = typeof(StreamAdapter.StreamlabsWebsocket.Communication.StreamlabsWebsocketAdapter);
                     break;
             }
+            OnPropertyChanged(nameof(ConnectionType));
         }
     }
     public string Host
@@ -104,13 +106,31 @@ public class EndpointConfigurationViewModel : INotifyPropertyChanged
             }
         }
     }
-    public ICommand SaveCommand => new Command(SaveConfig);
-    public async void SaveConfig()
+    public ICommand SaveCommand => new Command(VaidateAndSaveConfig);
+    public async void VaidateAndSaveConfig()
     {
+        if(!await ValidateConnectionInfo())
+        {
+            if(!await Application.Current.MainPage.DisplayAlert("Validation failed", "Connection could not be established, save anyway?", "Yes", "Cancel"))
+            {
+                return;
+            }
+        }
+
         ConfigurationManager configurationManager = new ConfigurationManager();
         configurationManager.UpdateEndpointConfiguration(_config);
 
         await Application.Current.MainPage.DisplayAlert("Saved", "Connection settings saved!", "OK");
+    }
+    private async Task<bool> ValidateConnectionInfo()
+    {
+        var adapter = AdapterFactory.CreateInstance(_config);
+        var sceneResult = await adapter.GetCurrentProgramScene();
+        if(sceneResult == null)
+        {
+            return false;
+        }
+        return true;
     }
     protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {

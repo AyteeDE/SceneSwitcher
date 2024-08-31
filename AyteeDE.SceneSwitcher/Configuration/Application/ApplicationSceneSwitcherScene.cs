@@ -17,6 +17,11 @@ public class ApplicationSceneSwitcherScene : IEquatable<ApplicationSceneSwitcher
         {
             return false;
         }
-        return Scene.Equals(other.Scene) && ProcessName.Equals(other.ProcessName) && Priority.Equals(other.Priority);
+
+        if(this.Scene != other.Scene)
+        {
+            return false;
+        }
+        return ProcessName.Equals(other.ProcessName) && Priority.Equals(other.Priority);
     }
 }

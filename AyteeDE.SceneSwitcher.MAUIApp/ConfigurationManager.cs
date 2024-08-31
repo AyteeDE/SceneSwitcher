@@ -1,13 +1,14 @@
 using System;
 using System.Text.Json;
 using AyteeDE.SceneSwitcher.Configuration;
+using AyteeDE.SceneSwitcher.Configuration.Application;
+using AyteeDE.StreamAdapter.Core.Communication;
 using AyteeDE.StreamAdapter.Core.Configuration;
 
 namespace AyteeDE.SceneSwitcher.MAUIApp;
 
 public class ConfigurationManager
 {
-    private const string CONFIG_FILE_NAME = "config.json";
     private static SceneSwitcherConfig _configuration;
     public SceneSwitcherConfig Configuration 
     {
@@ -23,8 +24,9 @@ public class ConfigurationManager
 		try
 		{
 			_configuration = JsonSerializer.Deserialize<SceneSwitcherConfig>(configJson);
+            //var x = AdapterFactory.CreateInstance(_configuration.EndpointConfiguration);
 		}
-		catch
+		catch (Exception ex)
 		{
 			_configuration = new SceneSwitcherConfig();
             _configuration.EndpointConfiguration.ConnectionType = typeof(AyteeDE.StreamAdapter.OBSStudioWebsocket5.Communication.OBSStudioWebsocket5Adapter);
@@ -32,7 +34,7 @@ public class ConfigurationManager
 	}
     private void TrySaveConfig()
     {
-        var json = JsonSerializer.Serialize(Configuration);
+        var json = JsonSerializer.Serialize(_configuration);
         Preferences.Default.Set("SceneSwitcherConfigJson", json);
     }
     public void UpdateEndpointConfiguration(EndpointConfiguration endpointConfiguration)
@@ -43,5 +45,12 @@ public class ConfigurationManager
         }
         TrySaveConfig();
     }
-
+    public void UpdateApplicationConfiguration(ApplicationSceneSwitcherConfig applicationConfiguration)
+    {
+        if(applicationConfiguration != null)
+        {
+            _configuration.ApplicationSceneSwitcherConfig = applicationConfiguration;
+        }
+        TrySaveConfig();
+    }
 }

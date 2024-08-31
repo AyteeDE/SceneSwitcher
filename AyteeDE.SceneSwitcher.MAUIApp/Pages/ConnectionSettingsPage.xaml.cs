@@ -4,12 +4,12 @@ namespace AyteeDE.SceneSwitcher.MAUIApp.Pages;
 
 public partial class ConnectionSettingsPage : ContentPage
 {
-	private EndpointConfigurationViewModel viewModel;
+	private EndpointConfigurationViewModel _viewModel;
 	public ConnectionSettingsPage()
 	{
 		InitializeComponent();
 		ConfigurationManager configurationManager = new ConfigurationManager();
-		viewModel = new EndpointConfigurationViewModel(configurationManager.Configuration.EndpointConfiguration);
-		BindingContext = viewModel;
+		_viewModel = new EndpointConfigurationViewModel(configurationManager.Configuration.EndpointConfiguration);
+		BindingContext = _viewModel;
 	}
 }
