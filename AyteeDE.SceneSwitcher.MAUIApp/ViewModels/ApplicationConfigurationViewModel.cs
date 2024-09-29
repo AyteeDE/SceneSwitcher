@@ -29,8 +29,18 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     private async void GetAdapterScenes()
     {
         var adapter = AdapterFactory.CreateInstance(_endpointConfig);
-        await adapter.ConnectAsync();
-        AdapterScenes = await adapter.GetScenes();
+        try
+        {
+            if(!await adapter.ConnectAsync())
+            {
+                throw new Exception("Connection could not be established.");
+            }
+            AdapterScenes = await adapter.GetScenes();
+        }
+        catch(Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error","Scenes could not be loaded, no connection to streaming client.", "OK");
+        }
     }   
     public int PollingInterval
     {
