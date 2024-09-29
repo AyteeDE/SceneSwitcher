@@ -16,4 +16,8 @@ public partial class SettingsPage : ContentPage
 	{
 		Navigation.PushAsync(new ApplicationSettingsPage());
 	}
+	public void TimerSettings_Clicked(Object sender, EventArgs e)
+	{
+		Navigation.PushAsync(new TimerSettingsPage());
+	}
 }

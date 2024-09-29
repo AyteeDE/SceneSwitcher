@@ -21,7 +21,8 @@
             <Button
                 Text="Timer Switcher" 
                 FontSize="Title"
-                WidthRequest="300"/>
+                WidthRequest="300"
+                Clicked="TimerSettings_Clicked"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

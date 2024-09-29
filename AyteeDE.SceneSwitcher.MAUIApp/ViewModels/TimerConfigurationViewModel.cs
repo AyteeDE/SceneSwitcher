@@ -1,27 +1,29 @@
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using AyteeDE.SceneSwitcher.Configuration.Application;
+using AyteeDE.SceneSwitcher.Configuration.Timer;
 using AyteeDE.StreamAdapter.Core.Communication;
 using AyteeDE.StreamAdapter.Core.Configuration;
 using AyteeDE.StreamAdapter.Core.Entities;
 
 namespace AyteeDE.SceneSwitcher.MAUIApp.ViewModels;
 
-public class ApplicationConfigurationViewModel : INotifyPropertyChanged
+public class TimerConfigurationViewModel : INotifyPropertyChanged
 {
-    private ApplicationSceneSwitcherConfig _applicationConfig;
+    private TimerSceneSwitcherConfig _timerConfig;
     private EndpointConfiguration _endpointConfig;
     private List<Scene> _adapterScenes;
-    private ObservableCollection<ApplicationSceneSwitcherSceneViewModel> _observableScenesList = new ObservableCollection<ApplicationSceneSwitcherSceneViewModel>();
-    public ApplicationConfigurationViewModel(ApplicationSceneSwitcherConfig applicationConfiguration, EndpointConfiguration endpointConfiguration)
+    private ObservableCollection<TimerSceneSwitcherSceneViewModel> _observableScenesList = new ObservableCollection<TimerSceneSwitcherSceneViewModel>();
+
+    public TimerConfigurationViewModel(TimerSceneSwitcherConfig timerConfiguration, EndpointConfiguration endpointConfiguration)
     {
-        _applicationConfig = applicationConfiguration;
+        _timerConfig = timerConfiguration;
         _endpointConfig = endpointConfiguration;
-        foreach(var scene in _applicationConfig.Scenes.OrderBy(s=>s.Priority))
+        foreach(var scene in _timerConfig.Scenes.OrderBy(s=>s.Position))
         {
-            ApplicationSceneSwitcherSceneViewModel sceneViewModel = new ApplicationSceneSwitcherSceneViewModel(scene);
+            TimerSceneSwitcherSceneViewModel sceneViewModel = new TimerSceneSwitcherSceneViewModel(scene);
             Scenes.Add(sceneViewModel);
         }
         GetAdapterScenes();
@@ -31,20 +33,32 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
         var adapter = AdapterFactory.CreateInstance(_endpointConfig);
         await adapter.ConnectAsync();
         AdapterScenes = await adapter.GetScenes();
-    }   
-    public int PollingInterval
+    }
+    public int Interval
     {
-        get => _applicationConfig.PollingInterval;
+        get => _timerConfig.Interval;
         set
         {
-            if(_applicationConfig.PollingInterval != value)
+            if(_timerConfig.Interval != value)
             {
-                _applicationConfig.PollingInterval = value;
-                OnPropertyChanged(nameof(PollingInterval));
+                _timerConfig.Interval = value;
+                OnPropertyChanged(nameof(Interval));
             }
         }
     }
-    public ObservableCollection<ApplicationSceneSwitcherSceneViewModel> Scenes
+    public bool IsRandom
+    {
+        get => _timerConfig.IsRandom;
+        set
+        {
+            if(_timerConfig.IsRandom != value)
+            {
+                _timerConfig.IsRandom = value;
+                OnPropertyChanged(nameof(IsRandom));
+            }
+        }
+    }
+    public ObservableCollection<TimerSceneSwitcherSceneViewModel> Scenes
     {
         get => _observableScenesList;
         set
@@ -53,18 +67,15 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Scenes));
         }
     }
-    private ApplicationSceneSwitcherSceneViewModel _editScene;
-    public ApplicationSceneSwitcherSceneViewModel EditScene
+    private TimerSceneSwitcherSceneViewModel _editScene;
+    public TimerSceneSwitcherSceneViewModel EditScene
     {
         get => _editScene;
         set
         {
-            if(_editScene != value)
-            {
-                _editScene = value;
-                OnPropertyChanged(nameof(EditScene));
-                OnPropertyChanged(nameof(IsEditEnabled));
-            }
+            _editScene = value;
+            OnPropertyChanged(nameof(EditScene));
+            OnPropertyChanged(nameof(IsEditEnabled));
         }
     }
     public List<Scene> AdapterScenes
@@ -84,36 +95,28 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     public ICommand MoveRuleDownCommand => new Command(MoveRuleDown);
     private void SaveConfig()
     {
-        var scenesList = new List<ApplicationSceneSwitcherScene>();
+        var scenesList = new List<TimerSceneSwitcherScene>();
         foreach(var sceneViewModel in Scenes)
         {
-            var scene = new ApplicationSceneSwitcherScene()
+            var scene = new TimerSceneSwitcherScene
             {
                 Scene = sceneViewModel.Scene,
-                ProcessName = sceneViewModel.ProcessName,
-                Priority = sceneViewModel.Priority,
-                NeedsFocus = sceneViewModel.NeedsFocus,
-                UseWindowTitleInsteadOfProcessName = sceneViewModel.UseWindowTitleInsteadOfProcessName
+                Position = sceneViewModel.Position,
+                DurationOverride = sceneViewModel.DurationOverride
             };
             scenesList.Add(scene);
         }
 
-        _applicationConfig.Scenes = scenesList;
+        _timerConfig.Scenes = scenesList;
         ConfigurationManager configurationManager = new ConfigurationManager();
-        configurationManager.UpdateApplicationConfiguration(_applicationConfig);
+        configurationManager.UpdateTimerConfiguration(_timerConfig);
         EditScene = null;
     }
     private void AddNewRule()
     {
-        EditScene = new ApplicationSceneSwitcherSceneViewModel(new ApplicationSceneSwitcherScene());
+        EditScene = new TimerSceneSwitcherSceneViewModel(new TimerSceneSwitcherScene());
         EditScene.Scene = _adapterScenes[0];
-        EditScene.Priority = 0;
-
-        foreach(var scene in Scenes)
-        {
-            scene.Priority++;
-        }
-
+        EditScene.Position = Scenes.Count;
         Scenes.Add(EditScene);
         SortSceneCollection();
     }
@@ -128,7 +131,7 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     }
     private void MoveRuleUp()
     {
-        MoveRule(-1);
+        MoveRule(-1);	
     }
     private void MoveRuleDown()
     {
@@ -138,7 +141,6 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     {
         int currentIndex = Scenes.IndexOf(EditScene);
         int newIndex = currentIndex + direction;
-
         if(newIndex >= 0 && newIndex < Scenes.Count)
         {
             Scenes.Move(currentIndex, newIndex);
@@ -148,17 +150,17 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     }
     private void SortSceneCollection()
     {
-        var sortedSceneCollection = new ObservableCollection<ApplicationSceneSwitcherSceneViewModel>();
+        var sortedSceneCollection = new ObservableCollection<TimerSceneSwitcherSceneViewModel>();
         int index = 0;
         foreach(var scene in Scenes)
         {
-            scene.Priority = index;
+            scene.Position = index;
             index++;
             sortedSceneCollection.Add(scene);
         }
         Scenes = sortedSceneCollection;
     }
-    public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    public void OnPropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

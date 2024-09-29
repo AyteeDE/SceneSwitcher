@@ -2,6 +2,7 @@ using System;
 using System.Text.Json;
 using AyteeDE.SceneSwitcher.Configuration;
 using AyteeDE.SceneSwitcher.Configuration.Application;
+using AyteeDE.SceneSwitcher.Configuration.Timer;
 using AyteeDE.StreamAdapter.Core.Communication;
 using AyteeDE.StreamAdapter.Core.Configuration;
 
@@ -50,6 +51,14 @@ public class ConfigurationManager
         if(applicationConfiguration != null)
         {
             _configuration.ApplicationSceneSwitcherConfig = applicationConfiguration;
+        }
+        TrySaveConfig();
+    }
+    public void UpdateTimerConfiguration(TimerSceneSwitcherConfig timerConfiguration)
+    {
+        if(timerConfiguration != null)
+        {
+            _configuration.TimerSceneSwitcherConfig = timerConfiguration;
         }
         TrySaveConfig();
     }
