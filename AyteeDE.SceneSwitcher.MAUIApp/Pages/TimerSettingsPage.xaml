@@ -23,6 +23,7 @@
                 <Label Text="Rules" />
                 <ListView
                     WidthRequest="300"
+                    HeightRequest="300"
                     ItemsSource="{Binding Scenes}"
                     SelectedItem="{Binding EditScene}"
                     SelectionMode="Single" >
