@@ -48,8 +48,9 @@ public class ApplicationSceneSwitcher
     private async Task SwitchScene(ApplicationSceneSwitcherScene targetScene)
     {
         await Task.Delay(targetScene.SwitchingDelay);
-        _currentScene = targetScene;
         var success = await _adapter.SetCurrentProgramScene(targetScene.Scene);
+        _currentScene = targetScene;
+        SubscribedEventHandler.InvokeSubscribedEvent(OnSceneSwitched, this, new SceneSwitchingEventArgs(_currentScene.Scene));
     }
     private ApplicationSceneSwitcherScene FindMatchingScene()
     {
@@ -107,4 +108,5 @@ public class ApplicationSceneSwitcher
         }
         return String.Empty;
     }
+    public event EventHandler<SceneSwitchingEventArgs> OnSceneSwitched;
 }

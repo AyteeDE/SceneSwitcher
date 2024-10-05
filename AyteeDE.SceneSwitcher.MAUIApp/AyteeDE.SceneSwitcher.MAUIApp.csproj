@@ -24,7 +24,7 @@
 		<ApplicationTitle>AyteeDE SceneSwitcher</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.ayteede.sceneswitcher.mauiapp</ApplicationId>
+		<ApplicationId>com.ayteede.sceneswitcher</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

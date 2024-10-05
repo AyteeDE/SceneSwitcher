@@ -42,6 +42,7 @@ public class TimerSceneSwitcher
         }
         await _adapter.SetCurrentProgramScene(next.Scene);
         _currentScene = next;
+        SubscribedEventHandler.InvokeSubscribedEvent(OnSceneSwitched, this, new SceneSwitchingEventArgs(_currentScene.Scene));
     }
     private TimerSceneSwitcherScene _currentScene;
     private TimerSceneSwitcherScene GetNextScene()
@@ -90,4 +91,5 @@ public class TimerSceneSwitcher
             return next;
         }
     }
+    public event EventHandler<SceneSwitchingEventArgs> OnSceneSwitched;
 }
