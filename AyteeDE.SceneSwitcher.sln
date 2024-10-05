@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AyteeDE.SceneSwitcher", "Ay
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AyteeDE.SceneSwitcher.MAUIApp", "AyteeDE.SceneSwitcher.MAUIApp\AyteeDE.SceneSwitcher.MAUIApp.csproj", "{5817FF52-14BE-4177-8D9D-0DCCE8233AE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AyteeDE.StreamAdapter.Core", "..\StreamAdapter\StreamAdapter\AyteeDE.StreamAdapter.Core\AyteeDE.StreamAdapter.Core.csproj", "{D1290231-5CA2-48E6-B732-F7D5ADC2A175}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AyteeDE.StreamAdapter.OBSStudioWebsocket5", "..\StreamAdapter\StreamAdapter\AyteeDE.StreamAdapter.OBSStudioWebsocket5\AyteeDE.StreamAdapter.OBSStudioWebsocket5.csproj", "{D01F6AE2-FCA0-4C36-AF29-3176B06FA037}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AyteeDE.StreamAdapter.StreamlabsWebsocket", "..\StreamAdapter\StreamAdapter\AyteeDE.StreamAdapter.StreamlabsWebsocket\AyteeDE.StreamAdapter.StreamlabsWebsocket.csproj", "{EDCDE487-7191-46DE-802F-C9E08F47596A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,18 @@ Global
 		{5817FF52-14BE-4177-8D9D-0DCCE8233AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5817FF52-14BE-4177-8D9D-0DCCE8233AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5817FF52-14BE-4177-8D9D-0DCCE8233AE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1290231-5CA2-48E6-B732-F7D5ADC2A175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1290231-5CA2-48E6-B732-F7D5ADC2A175}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1290231-5CA2-48E6-B732-F7D5ADC2A175}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1290231-5CA2-48E6-B732-F7D5ADC2A175}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D01F6AE2-FCA0-4C36-AF29-3176B06FA037}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D01F6AE2-FCA0-4C36-AF29-3176B06FA037}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D01F6AE2-FCA0-4C36-AF29-3176B06FA037}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D01F6AE2-FCA0-4C36-AF29-3176B06FA037}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDCDE487-7191-46DE-802F-C9E08F47596A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDCDE487-7191-46DE-802F-C9E08F47596A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDCDE487-7191-46DE-802F-C9E08F47596A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDCDE487-7191-46DE-802F-C9E08F47596A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

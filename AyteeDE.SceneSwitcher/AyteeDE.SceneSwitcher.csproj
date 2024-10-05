@@ -1,14 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\StreamAdapter\StreamAdapter\AyteeDE.StreamAdapter.OBSStudioWebsocket5\AyteeDE.StreamAdapter.OBSStudioWebsocket5.csproj" />
+    <ProjectReference Include="..\..\StreamAdapter\StreamAdapter\AyteeDE.StreamAdapter.StreamlabsWebsocket\AyteeDE.StreamAdapter.StreamlabsWebsocket.csproj" />
+    <ProjectReference Include="..\..\StreamAdapter\StreamAdapter\AyteeDE.StreamAdapter.Core\AyteeDE.StreamAdapter.Core.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AyteeDE.StreamAdapter.OBSStudioWebsocket5" Version="0.0.2" />
-    <PackageReference Include="AyteeDE.StreamAdapter.StreamlabsWebsocket" Version="0.0.2" />
-  </ItemGroup>
 
 </Project>
