@@ -12,5 +12,15 @@ public partial class MainPage : ContentPage
 	{
 		await Navigation.PushAsync(new SettingsPage());
 	}
+
+    private async void AppSwitching_Clicked(object sender, EventArgs e)
+    {
+		await Navigation.PushAsync(new ApplicationSwitcherPage());
+    }
+
+    private async void TimerSwitching_Clicked(object sender, EventArgs e)
+    {
+		await Navigation.PushAsync(new TimerSwitcherPage());
+    }
 }
 

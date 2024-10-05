@@ -11,12 +11,14 @@
                 Text="App Switching"
                 FontSize="Title"
                 WidthRequest="300"
-                IsEnabled="{Binding HasValidEndpointConfiguration}"/>
+                IsEnabled="{Binding HasValidEndpointConfiguration}"
+                Clicked="AppSwitching_Clicked"/>
             <Button
                 Text="Timer Switching"
                 FontSize="Title"
                 WidthRequest="300"
-                IsEnabled="{Binding HasValidEndpointConfiguration}"/>
+                IsEnabled="{Binding HasValidEndpointConfiguration}"
+                Clicked="TimerSwitching_Clicked"/>
             <Button
                 Text="Settings"
                 FontSize="Title"
