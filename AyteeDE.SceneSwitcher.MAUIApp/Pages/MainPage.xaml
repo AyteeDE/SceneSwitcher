@@ -8,7 +8,7 @@
             VerticalOptions="Center"
             Spacing="75">
             <Button
-                Text="App Switching"
+                Text="Application Switching"
                 FontSize="Title"
                 WidthRequest="300"
                 IsEnabled="{Binding HasValidEndpointConfiguration}"

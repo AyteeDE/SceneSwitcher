@@ -32,17 +32,20 @@ public class TimerSceneSwitcher
     private async void SwitchScene(Object stateInfo)
     {
         var next = GetNextScene();
-        if(next.DurationOverride != 0)
+        if(!_currentScene.Equals(next))
         {
-            _timer.Change(next.DurationOverride, next.DurationOverride);
+            if(next.DurationOverride != 0)
+            {
+                _timer.Change(next.DurationOverride, next.DurationOverride);
+            }
+            else
+            {
+                _timer.Change(_timerSceneSwitcherConfig.Interval, _timerSceneSwitcherConfig.Interval);
+            }
+            await _adapter.SetCurrentProgramScene(next.Scene);
+            _currentScene = next;
+            SubscribedEventHandler.InvokeSubscribedEvent(OnSceneSwitched, this, new SceneSwitchingEventArgs(_currentScene.Scene));
         }
-        else
-        {
-            _timer.Change(_timerSceneSwitcherConfig.Interval, _timerSceneSwitcherConfig.Interval);
-        }
-        await _adapter.SetCurrentProgramScene(next.Scene);
-        _currentScene = next;
-        SubscribedEventHandler.InvokeSubscribedEvent(OnSceneSwitched, this, new SceneSwitchingEventArgs(_currentScene.Scene));
     }
     private TimerSceneSwitcherScene _currentScene;
     private TimerSceneSwitcherScene GetNextScene()
@@ -69,7 +72,7 @@ public class TimerSceneSwitcher
         var scene = _timerSceneSwitcherConfig.Scenes[rngPosition];
 
         //Cancel the recursion if random scene is the current scenes 5 times in a row to prevent stackoverflow
-        if(scene.Equals(_currentScene) || currentIterations == 5)
+        if(!scene.Equals(_currentScene) || currentIterations == 5)
         {
             return scene;
         }

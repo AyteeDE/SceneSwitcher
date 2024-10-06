@@ -13,15 +13,7 @@ public class ApplicationSceneSwitcherScene : IEquatable<ApplicationSceneSwitcher
 
     public bool Equals(ApplicationSceneSwitcherScene? other)
     {
-        if(other == null)
-        {
-            return false;
-        }
-
-        if(this.Scene != other.Scene)
-        {
-            return false;
-        }
-        return ProcessName.Equals(other.ProcessName) && Priority.Equals(other.Priority);
+        if(other == null || other.Scene == null) return false;
+        return ProcessName.Equals(other.ProcessName) && Scene.Equals(other.Scene) && Priority.Equals(other.Priority);
     }
 }

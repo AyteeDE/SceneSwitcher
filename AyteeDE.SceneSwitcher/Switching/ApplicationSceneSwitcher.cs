@@ -38,19 +38,20 @@ public class ApplicationSceneSwitcher
     {
         System.Console.WriteLine("Tick...");
         var matchingScene = FindMatchingScene();
-        if(matchingScene != null && !matchingScene.Equals(_currentScene))
+        if(matchingScene != null)
         {
-            Console.WriteLine($"Matching scene {matchingScene.Scene.Name} found, switching...");
             await SwitchScene(matchingScene);
-            Console.WriteLine("Switched!");
         }
     }
     private async Task SwitchScene(ApplicationSceneSwitcherScene targetScene)
     {
-        await Task.Delay(targetScene.SwitchingDelay);
-        var success = await _adapter.SetCurrentProgramScene(targetScene.Scene);
-        _currentScene = targetScene;
-        SubscribedEventHandler.InvokeSubscribedEvent(OnSceneSwitched, this, new SceneSwitchingEventArgs(_currentScene.Scene));
+        if(!_currentScene.Equals(targetScene))
+        {
+            await Task.Delay(targetScene.SwitchingDelay);
+            await _adapter.SetCurrentProgramScene(targetScene.Scene);
+            _currentScene = targetScene;
+            SubscribedEventHandler.InvokeSubscribedEvent(OnSceneSwitched, this, new SceneSwitchingEventArgs(_currentScene.Scene));
+        }
     }
     private ApplicationSceneSwitcherScene FindMatchingScene()
     {

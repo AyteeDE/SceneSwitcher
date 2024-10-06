@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AyteeDE.SceneSwitcher.MAUIApp.Pages.TimerSwitcherPage"
-             Title="TimerSwitcherPage">
+             Title="Timer Switching">
     <ScrollView>
         <VerticalStackLayout
             HorizontalOptions="Center"
@@ -14,6 +14,9 @@
                 x:Name="cmdToggle"
                 Text="Start"
                 Clicked="Toggle_Clicked"/>
+            <Label
+                HeightRequest="300"
+                x:Name="lblLog" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
