@@ -4,34 +4,21 @@ using AyteeDE.StreamAdapter.Core.Configuration;
 
 namespace AyteeDE.SceneSwitcher.Switching;
 
-public class TimerSceneSwitcher
+public class TimerSceneSwitcher : SceneSwitcher
 {
     private TimerSceneSwitcherConfig _timerSceneSwitcherConfig;
-    private Timer _timer;
-    private IStreamAdapter _adapter;
-    public TimerSceneSwitcher(EndpointConfiguration endpointConfiguration, TimerSceneSwitcherConfig timerSceneSwitcherConfig)
+    private TimerSceneSwitcherScene _currentScene;
+    public TimerSceneSwitcher(EndpointConfiguration endpointConfiguration, TimerSceneSwitcherConfig timerSceneSwitcherConfig) : base(endpointConfiguration)
     {
         _timerSceneSwitcherConfig = timerSceneSwitcherConfig;
-        _adapter = AdapterFactory.CreateInstance(endpointConfiguration);
     }
-    public bool IsTimerRunning
+    public void StartSwitching()
     {
-        get => _timer != null;
+        base.StartSwitching(TimerTick, _timerSceneSwitcherConfig.Interval, _timerSceneSwitcherConfig.Interval);
     }
-    public async void StartSwitching()
+    private async void TimerTick(Object stateInfo)
     {
-        _currentScene = await TryGetCurrentSceneOnStart();
-
-        AutoResetEvent autoReset = new AutoResetEvent(false);
-        _timer = new Timer(SwitchScene, autoReset, _timerSceneSwitcherConfig.Interval, _timerSceneSwitcherConfig.Interval);
-    }
-    public void StopSwitching()
-    {
-        _timer.Dispose();
-    }
-    private async void SwitchScene(Object stateInfo)
-    {
-        var next = GetNextScene();
+        var next = await GetNextScene();
         if(!_currentScene.Equals(next))
         {
             if(next.DurationOverride != 0)
@@ -42,14 +29,17 @@ public class TimerSceneSwitcher
             {
                 _timer.Change(_timerSceneSwitcherConfig.Interval, _timerSceneSwitcherConfig.Interval);
             }
-            await _adapter.SetCurrentProgramScene(next.Scene);
+            await SwitchScene(next.Scene);
             _currentScene = next;
-            SubscribedEventHandler.InvokeSubscribedEvent(OnSceneSwitched, this, new SceneSwitchingEventArgs(_currentScene.Scene));
         }
     }
-    private TimerSceneSwitcherScene _currentScene;
-    private TimerSceneSwitcherScene GetNextScene()
+    private async Task<TimerSceneSwitcherScene> GetNextScene()
     {
+        if(_currentScene == null)
+        {
+            _currentScene = await TryGetCurrentSceneOnStart();
+        }
+
         if(_timerSceneSwitcherConfig.IsRandom)
         {
             return GetNextRandomScene();
@@ -94,5 +84,4 @@ public class TimerSceneSwitcher
             return next;
         }
     }
-    public event EventHandler<SceneSwitchingEventArgs> OnSceneSwitched;
 }

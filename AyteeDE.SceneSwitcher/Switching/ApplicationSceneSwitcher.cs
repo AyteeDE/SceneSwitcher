@@ -7,17 +7,14 @@ using AyteeDE.StreamAdapter.Core.Configuration;
 
 namespace AyteeDE.SceneSwitcher.Switching;
 
-public class ApplicationSceneSwitcher
+public class ApplicationSceneSwitcher : SceneSwitcher
 {
     private ApplicationSceneSwitcherConfig _applicationSceneSwitcherConfig;
-    private Timer _timer;
-    private IStreamAdapter _adapter;
     private ApplicationSceneSwitcherScene _currentScene;
     private static PlatformID _os = Environment.OSVersion.Platform; //Imported DLLs for getting Foreground-windows only work on windows -> OS-Validation
-    public ApplicationSceneSwitcher(EndpointConfiguration endpointConfiguration, ApplicationSceneSwitcherConfig config)
+    public ApplicationSceneSwitcher(EndpointConfiguration endpointConfiguration, ApplicationSceneSwitcherConfig config) : base(endpointConfiguration)
     {
         _applicationSceneSwitcherConfig = config;
-        _adapter = AdapterFactory.CreateInstance(endpointConfiguration);
     }
     [DllImport("user32.dll")]
     static extern IntPtr GetForegroundWindow();
@@ -27,30 +24,16 @@ public class ApplicationSceneSwitcher
     static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int length);
     public void StartSwitching()
     {
-        AutoResetEvent autoReset = new AutoResetEvent(false);
-        _timer = new Timer(PollingTick, autoReset, 0, _applicationSceneSwitcherConfig.PollingInterval);
+        base.StartSwitching(TimerTick, 0, _applicationSceneSwitcherConfig.PollingInterval);
     }
-    public void StopSwitching()
+    private async void TimerTick(Object stateInfo)
     {
-        _timer.Dispose();
-    }
-    public async void PollingTick(object stateInfo)
-    {
-        System.Console.WriteLine("Tick...");
         var matchingScene = FindMatchingScene();
-        if(matchingScene != null)
+        if(matchingScene != null && !_currentScene.Equals(matchingScene))
         {
-            await SwitchScene(matchingScene);
-        }
-    }
-    private async Task SwitchScene(ApplicationSceneSwitcherScene targetScene)
-    {
-        if(!_currentScene.Equals(targetScene))
-        {
-            await Task.Delay(targetScene.SwitchingDelay);
-            await _adapter.SetCurrentProgramScene(targetScene.Scene);
-            _currentScene = targetScene;
-            SubscribedEventHandler.InvokeSubscribedEvent(OnSceneSwitched, this, new SceneSwitchingEventArgs(_currentScene.Scene));
+            await Task.Delay(matchingScene.SwitchingDelay);
+            await SwitchScene(matchingScene.Scene);
+            _currentScene = matchingScene;
         }
     }
     private ApplicationSceneSwitcherScene FindMatchingScene()
