@@ -9,10 +9,18 @@ public class SceneSwitcher
 {
     protected IStreamAdapter _adapter;
     protected Timer _timer;
+    protected bool _isPaused;
     protected SceneSwitcher(EndpointConfiguration endpointConfiguration)
     {
         _adapter = AdapterFactory.CreateInstance(endpointConfiguration);
+        _adapter.OnCurrentProgramSceneChanged += OnCurrentProgramSceneChanged;
     }
+
+    private void OnCurrentProgramSceneChanged(object? sender, Scene e)
+    {
+        SubscribedEventHandler.InvokeSubscribedEvent(OnSceneChanged, this, new SceneSwitchingEventArgs(e));
+    }
+
     protected bool IsTimerRunning
     {
         get => _timer != null;
@@ -21,10 +29,25 @@ public class SceneSwitcher
     {
         AutoResetEvent autoReset = new AutoResetEvent(false);
         _timer = new Timer(timerCallback, autoReset, dueTime, period);
+        SubscribedEventHandler.InvokeSubscribedEvent(OnSwitchingStarted, this);
     }
     public void StopSwitching()
     {
         _timer.Dispose();
+        SubscribedEventHandler.InvokeSubscribedEvent(OnSwitchingStopped, this);
+        _isPaused = false;
+    }
+    public void PauseSwitching()
+    {
+        StopSwitching();
+        _isPaused = true;
+        SubscribedEventHandler.InvokeSubscribedEvent(OnSwitchingPaused, this);
+    }
+    public void ResumeSwitching(TimerCallback timerCallback, int dueTime, int period)
+    {
+        StartSwitching(timerCallback, dueTime, period);
+        _isPaused = false;
+        SubscribedEventHandler.InvokeSubscribedEvent(OnSwitchingResumed, this);
     }
     protected async Task<bool> SwitchScene(Scene scene)
     {
@@ -36,4 +59,9 @@ public class SceneSwitcher
         return false;
     }
     public event EventHandler<SceneSwitchingEventArgs> OnSceneSwitched;
+    public event EventHandler<SceneSwitchingEventArgs> OnSceneChanged;
+    public event EventHandler OnSwitchingStarted;
+    public event EventHandler OnSwitchingStopped;
+    public event EventHandler OnSwitchingPaused;
+    public event EventHandler OnSwitchingResumed;
 }
