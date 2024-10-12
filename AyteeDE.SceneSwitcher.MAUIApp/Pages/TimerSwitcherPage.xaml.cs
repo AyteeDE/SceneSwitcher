@@ -13,6 +13,8 @@ public partial class TimerSwitcherPage : ContentPage
 		ConfigurationManager configurationManager = new ConfigurationManager();
 		_switcher = new TimerSceneSwitcher(configurationManager.Configuration.EndpointConfiguration, configurationManager.Configuration.TimerSceneSwitcherConfig);
 		_switcher.OnSceneSwitched += OnSceneSwitched;
+		_switcher.OnSwitchingPaused += OnSwitchingPaused;
+		_switcher.OnSwitchingResumed += OnSwitchingResumed;
 	}
 	
     private void OnSceneSwitched(object? sender, SceneSwitchingEventArgs e)
@@ -21,6 +23,18 @@ public partial class TimerSwitcherPage : ContentPage
 			lblLog.Text = $"Switched to {e.Scene.Name}\r\n" + lblLog.Text;
 		});
     }
+	private void OnSwitchingPaused(object sender, EventArgs e)
+	{
+		MainThread.BeginInvokeOnMainThread(() => {
+			lblLog.Text = $"Paused by manually switching scene\r\n" + lblLog.Text;
+		});
+	}
+	private void OnSwitchingResumed(object sender, EventArgs e)
+	{
+		MainThread.BeginInvokeOnMainThread(() => {
+			lblLog.Text = $"Resumed after manually switching scene\r\n" + lblLog.Text;
+		});
+	}
 	protected override void OnDisappearing() 
 	{
 		if(_isRunning)

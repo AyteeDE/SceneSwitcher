@@ -11,6 +11,32 @@ public class TimerSceneSwitcher : SceneSwitcher
     public TimerSceneSwitcher(EndpointConfiguration endpointConfiguration, TimerSceneSwitcherConfig timerSceneSwitcherConfig) : base(endpointConfiguration)
     {
         _timerSceneSwitcherConfig = timerSceneSwitcherConfig;
+        OnSceneChanged += SceneChanged;
+    }
+    public void SceneChanged(object sender, SceneSwitchingEventArgs e)
+    {
+        bool sceneInConfig = false;
+        foreach(var scene in _timerSceneSwitcherConfig.Scenes)
+        {
+            if(e.Scene.Equals(scene.Scene))
+            {
+                sceneInConfig = true;
+            }
+        }
+        if(sceneInConfig)
+        {
+            if(_isPaused)
+            {
+                ResumeSwitching(TimerTick, _timerSceneSwitcherConfig.Interval, _timerSceneSwitcherConfig.Interval);
+            }
+        }
+        else
+        {
+            if(!_isPaused)
+            {
+                PauseSwitching();
+            }
+        }
     }
     public void StartSwitching()
     {
@@ -19,7 +45,7 @@ public class TimerSceneSwitcher : SceneSwitcher
     private async void TimerTick(Object stateInfo)
     {
         var next = await GetNextScene();
-        if(!_currentScene.Equals(next))
+        if(!next.Equals(_currentScene))
         {
             if(next.DurationOverride != 0)
             {

@@ -56,7 +56,11 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     }
     public ObservableCollection<ApplicationSceneSwitcherSceneViewModel> Scenes
     {
-        get => _observableScenesList;
+        get 
+        {
+            _observableScenesList = new ObservableCollection<ApplicationSceneSwitcherSceneViewModel>(_observableScenesList.OrderByDescending(o => o.Priority));
+            return _observableScenesList;
+        }
         set
         {
             _observableScenesList = value;
@@ -117,12 +121,12 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     {
         EditScene = new ApplicationSceneSwitcherSceneViewModel(new ApplicationSceneSwitcherScene());
         EditScene.Scene = _adapterScenes[0];
-        EditScene.Priority = 0;
+        EditScene.Priority = Scenes.Count;
 
-        foreach(var scene in Scenes)
+        /* foreach(var scene in Scenes)
         {
             scene.Priority++;
-        }
+        } */
 
         Scenes.Add(EditScene);
         SortSceneCollection();
@@ -159,14 +163,17 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     private void SortSceneCollection()
     {
         var sortedSceneCollection = new ObservableCollection<ApplicationSceneSwitcherSceneViewModel>();
-        int index = 0;
-        foreach(var scene in Scenes)
+        int index = Scenes.Count;
+        if(Scenes.Count > 0)
         {
-            scene.Priority = index;
-            index++;
-            sortedSceneCollection.Add(scene);
+            foreach(var scene in Scenes)
+            {
+                index--;
+                scene.Priority = index;
+                sortedSceneCollection.Add(scene);
+            }
+            Scenes = sortedSceneCollection;
         }
-        Scenes = sortedSceneCollection;
     }
     public void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {

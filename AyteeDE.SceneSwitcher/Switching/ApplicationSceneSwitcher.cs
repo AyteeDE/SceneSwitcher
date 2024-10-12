@@ -15,6 +15,7 @@ public class ApplicationSceneSwitcher : SceneSwitcher
     public ApplicationSceneSwitcher(EndpointConfiguration endpointConfiguration, ApplicationSceneSwitcherConfig config) : base(endpointConfiguration)
     {
         _applicationSceneSwitcherConfig = config;
+        OnSceneChanged += SceneChanged;
     }
     [DllImport("user32.dll")]
     static extern IntPtr GetForegroundWindow();
@@ -26,10 +27,36 @@ public class ApplicationSceneSwitcher : SceneSwitcher
     {
         base.StartSwitching(TimerTick, 0, _applicationSceneSwitcherConfig.PollingInterval);
     }
+    public void SceneChanged(object sender, SceneSwitchingEventArgs e)
+    {
+        bool sceneInConfig = false;
+        foreach(var scene in _applicationSceneSwitcherConfig.Scenes)
+        {
+            if(e.Scene.Equals(scene.Scene))
+            {
+                sceneInConfig = true;
+            }
+        }
+        if(sceneInConfig)
+        {
+            if(_isPaused)
+            {
+                ResumeSwitching(TimerTick, 0, _applicationSceneSwitcherConfig.PollingInterval);
+            }
+        }
+        else
+        {
+            if(!_isPaused)
+            {
+                _currentScene = null;
+                PauseSwitching();
+            }
+        }
+    }
     private async void TimerTick(Object stateInfo)
     {
         var matchingScene = FindMatchingScene();
-        if(matchingScene != null && !_currentScene.Equals(matchingScene))
+        if(matchingScene != null && !matchingScene.Equals(_currentScene))
         {
             await Task.Delay(matchingScene.SwitchingDelay);
             await SwitchScene(matchingScene.Scene);
@@ -38,7 +65,7 @@ public class ApplicationSceneSwitcher : SceneSwitcher
     }
     private ApplicationSceneSwitcherScene FindMatchingScene()
     {
-        foreach(var scene in _applicationSceneSwitcherConfig.Scenes.OrderBy(s => s.Priority))
+        foreach(var scene in _applicationSceneSwitcherConfig.Scenes.OrderByDescending(s => s.Priority))
         {
             if(scene.NeedsFocus && scene.UseWindowTitleInsteadOfProcessName && _os == PlatformID.Win32NT)
             {
@@ -92,5 +119,4 @@ public class ApplicationSceneSwitcher : SceneSwitcher
         }
         return String.Empty;
     }
-    public event EventHandler<SceneSwitchingEventArgs> OnSceneSwitched;
 }

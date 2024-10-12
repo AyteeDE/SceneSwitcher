@@ -12,6 +12,8 @@ public partial class ApplicationSwitcherPage : ContentPage
 		ConfigurationManager configurationManager = new ConfigurationManager();
 		_switcher = new ApplicationSceneSwitcher(configurationManager.Configuration.EndpointConfiguration, configurationManager.Configuration.ApplicationSceneSwitcherConfig);
 		_switcher.OnSceneSwitched += OnSceneSwitched;
+		_switcher.OnSwitchingPaused += OnSwitchingPaused;
+		_switcher.OnSwitchingResumed += OnSwitchingResumed;
 	}
     private void OnSceneSwitched(object? sender, SceneSwitchingEventArgs e)
     {
@@ -19,6 +21,18 @@ public partial class ApplicationSwitcherPage : ContentPage
 			lblLog.Text = $"Switched to {e.Scene.Name}\r\n" + lblLog.Text;
 		});
     }
+	private void OnSwitchingPaused(object sender, EventArgs e)
+	{
+		MainThread.BeginInvokeOnMainThread(() => {
+			lblLog.Text = $"Paused by manually switching scene\r\n" + lblLog.Text;
+		});
+	}
+	private void OnSwitchingResumed(object sender, EventArgs e)
+	{
+		MainThread.BeginInvokeOnMainThread(() => {
+			lblLog.Text = $"Resumed after manually switching scene\r\n" + lblLog.Text;
+		});
+	}
 	protected override void OnDisappearing() 
 	{
 		if(_isRunning)

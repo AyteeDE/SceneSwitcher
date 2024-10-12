@@ -5,7 +5,19 @@ namespace AyteeDE.SceneSwitcher.Configuration.Application;
 public class ApplicationSceneSwitcherScene : IEquatable<ApplicationSceneSwitcherScene>
 {
     public Scene Scene { get; set; }
-    public string ProcessName { get; set; }
+    private string _processName;
+    public string ProcessName
+    {
+        get 
+        {
+            if(_processName == null)
+            {
+                return "";
+            }
+            return _processName;
+        }
+        set => _processName = value;
+    }
     public int Priority { get; set; }
     public int SwitchingDelay { get; set; } = 0;
     public bool NeedsFocus { get; set; }
