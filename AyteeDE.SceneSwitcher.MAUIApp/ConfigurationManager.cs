@@ -25,7 +25,6 @@ public class ConfigurationManager
 		try
 		{
 			_configuration = JsonSerializer.Deserialize<SceneSwitcherConfig>(configJson);
-            //var x = AdapterFactory.CreateInstance(_configuration.EndpointConfiguration);
 		}
 		catch (Exception ex)
 		{

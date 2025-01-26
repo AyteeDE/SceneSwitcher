@@ -51,12 +51,16 @@ public class SceneSwitcher
     }
     protected async Task<bool> SwitchScene(Scene scene)
     {
-        if(await _adapter.SetCurrentProgramScene(scene))
+        try
         {
+            await _adapter.SetCurrentProgramScene(scene);
             SubscribedEventHandler.InvokeSubscribedEvent(OnSceneSwitched, this, new SceneSwitchingEventArgs(scene));
             return true;
         }
-        return false;
+        catch(Exception ex)
+        {
+            return false;
+        }
     }
     public event EventHandler<SceneSwitchingEventArgs> OnSceneSwitched;
     public event EventHandler<SceneSwitchingEventArgs> OnSceneChanged;
