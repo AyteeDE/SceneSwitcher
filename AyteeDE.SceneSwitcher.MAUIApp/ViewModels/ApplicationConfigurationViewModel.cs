@@ -56,11 +56,7 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     }
     public ObservableCollection<ApplicationSceneSwitcherSceneViewModel> Scenes
     {
-        get 
-        {
-            _observableScenesList = new ObservableCollection<ApplicationSceneSwitcherSceneViewModel>(_observableScenesList.OrderByDescending(o => o.Priority));
-            return _observableScenesList;
-        }
+        get => _observableScenesList;
         set
         {
             _observableScenesList = value;

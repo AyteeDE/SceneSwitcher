@@ -65,25 +65,25 @@ public class ApplicationSceneSwitcher : SceneSwitcher
     }
     private ApplicationSceneSwitcherScene FindMatchingScene()
     {
-        foreach(var scene in _applicationSceneSwitcherConfig.Scenes.OrderByDescending(s => s.Priority))
+        foreach(var scene in _applicationSceneSwitcherConfig.Scenes.OrderBy(s => s.Priority))
         {
             if(scene.NeedsFocus && scene.UseWindowTitleInsteadOfProcessName && _os == PlatformID.Win32NT)
             {
-                if(GetFocussedWindowTitle().Contains(scene.ProcessName))
+                if(GetFocussedWindowTitle().Contains(scene.ProcessName.ToLower()))
                 {
                     return scene;
                 }
             }
             else if(scene.NeedsFocus && _os == PlatformID.Win32NT)
             {
-                if(GetFocussedWindowProcessName() == scene.ProcessName)
+                if(GetFocussedWindowProcessName() == scene.ProcessName.ToLower())
                 {
                     return scene;
                 }
             }
             else
             {
-                if(GetProcesses().FirstOrDefault(p => p == scene.ProcessName) != null || String.IsNullOrWhiteSpace(scene.ProcessName)) //empty ProcessName -> Default Scene after no other matching scene was found
+                if(GetProcesses().FirstOrDefault(p => p == scene.ProcessName.ToLower()) != null || String.IsNullOrWhiteSpace(scene.ProcessName)) //empty ProcessName -> Default Scene after no other matching scene was found
                 {
                     return scene;
                 }
@@ -97,7 +97,7 @@ public class ApplicationSceneSwitcher : SceneSwitcher
         var processes = Process.GetProcesses();
         foreach(var process in processes)
         {
-            processList.Add(process.ProcessName);
+            processList.Add(process.ProcessName.ToLower());
         }
         return processList;
     }
@@ -106,7 +106,7 @@ public class ApplicationSceneSwitcher : SceneSwitcher
         IntPtr handle = GetForegroundWindow();
         GetWindowThreadProcessId(handle, out uint processId);
         var process = Process.GetProcessById((int)processId);
-        return process.ProcessName;
+        return process.ProcessName.ToLower();
     }
     private string GetFocussedWindowTitle()
     {
@@ -115,7 +115,7 @@ public class ApplicationSceneSwitcher : SceneSwitcher
         StringBuilder stringBuilder = new StringBuilder(nChars);
         if(GetWindowText(handle, stringBuilder, nChars) > 0)
         {
-            return stringBuilder.ToString();
+            return stringBuilder.ToString().ToLower();
         }
         return String.Empty;
     }
