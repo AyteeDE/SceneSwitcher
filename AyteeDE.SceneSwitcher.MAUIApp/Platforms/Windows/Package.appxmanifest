@@ -11,9 +11,9 @@
   <mp:PhoneIdentity PhoneProductId="AAF10F5A-0CA2-417B-88ED-387E255A84E1" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>$placeholder$</DisplayName>
-    <PublisherDisplayName>User Name</PublisherDisplayName>
-    <Logo>$placeholder$.png</Logo>
+    <DisplayName>AyteeDE SceneSwitcher</DisplayName>
+    <PublisherDisplayName>AyteeDE</PublisherDisplayName>
+    <Logo>sceneswitcher.ico</Logo>
   </Properties>
 
   <Dependencies>
