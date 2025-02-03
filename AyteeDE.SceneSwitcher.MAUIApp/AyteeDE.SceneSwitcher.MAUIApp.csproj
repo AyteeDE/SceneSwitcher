@@ -46,7 +46,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\sceneswitcher.svg" />
+		<MauiIcon Include="Resources\AppIcon\sceneswitcher.svg" Color="#FFFFFF" />
 
 		<!-- Splash Screen -->
 
