@@ -19,7 +19,7 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     {
         _applicationConfig = applicationConfiguration;
         _endpointConfig = endpointConfiguration;
-        foreach(var scene in _applicationConfig.Scenes.OrderBy(s=>s.Priority))
+        foreach(var scene in _applicationConfig.Scenes.OrderByDescending(s=>s.Priority))
         {
             ApplicationSceneSwitcherSceneViewModel sceneViewModel = new ApplicationSceneSwitcherSceneViewModel(scene);
             Scenes.Add(sceneViewModel);
@@ -117,14 +117,7 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     {
         EditScene = new ApplicationSceneSwitcherSceneViewModel(new ApplicationSceneSwitcherScene());
         EditScene.Scene = _adapterScenes[0];
-        EditScene.Priority = Scenes.Count;
-
-        /* foreach(var scene in Scenes)
-        {
-            scene.Priority++;
-        } */
-
-        Scenes.Add(EditScene);
+        Scenes.Insert(0, EditScene);
         SortSceneCollection();
     }
     private void RemoveRule()

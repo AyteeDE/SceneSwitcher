@@ -65,7 +65,7 @@ public class ApplicationSceneSwitcher : SceneSwitcher
     }
     private ApplicationSceneSwitcherScene FindMatchingScene()
     {
-        foreach(var scene in _applicationSceneSwitcherConfig.Scenes.OrderBy(s => s.Priority))
+        foreach(var scene in _applicationSceneSwitcherConfig.Scenes.OrderByDescending(s => s.Priority))
         {
             if(scene.NeedsFocus && scene.UseWindowTitleInsteadOfProcessName && _os == PlatformID.Win32NT)
             {
