@@ -4,6 +4,7 @@ using System.Text;
 using AyteeDE.SceneSwitcher.Configuration.Application;
 using AyteeDE.StreamAdapter.Core.Communication;
 using AyteeDE.StreamAdapter.Core.Configuration;
+using LibreHardwareMonitor.Hardware;
 
 namespace AyteeDE.SceneSwitcher.Switching;
 
@@ -118,5 +119,38 @@ public class ApplicationSceneSwitcher : SceneSwitcher
             return stringBuilder.ToString().ToLower();
         }
         return String.Empty;
+    }
+    private int GetGPULoad()
+    {
+        int loadValue = 0;
+
+        Computer computer= new Computer()
+        {
+            IsGpuEnabled = true
+        };
+
+        computer.Open();
+
+        foreach(var hardware in computer.Hardware)
+        {
+            if(hardware.HardwareType == HardwareType.GpuNvidia || hardware.HardwareType == HardwareType.GpuAmd || hardware.HardwareType == HardwareType.GpuIntel)
+            {
+                hardware.Update();
+                foreach(var sensor in hardware.Sensors)
+                {
+                    if(sensor.SensorType == SensorType.Load && sensor.Name.Contains("GPU Core"))
+                    {
+                        if(sensor.Value != null)
+                        {
+                            loadValue = (int)sensor.Value;
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
+        return loadValue;
     }
 }
