@@ -68,6 +68,17 @@ public class ApplicationSceneSwitcher : SceneSwitcher
     {
         foreach(var scene in _applicationSceneSwitcherConfig.Scenes.OrderByDescending(s => s.Priority))
         {
+            int gpuLoad = 0;
+            if(_os == PlatformID.Win32NT)
+            {
+                gpuLoad = GetGPULoad(scene.GPUName);
+            }
+
+            if(gpuLoad < scene.GPULoadLimit) //if GPU Load limit is not set or exceeded, continue with next scene
+            {
+                continue;
+            }
+
             if(scene.NeedsFocus && scene.UseWindowTitleInsteadOfProcessName && _os == PlatformID.Win32NT)
             {
                 if(GetFocussedWindowTitle().Contains(scene.ProcessName.ToLower()))
@@ -120,37 +131,37 @@ public class ApplicationSceneSwitcher : SceneSwitcher
         }
         return String.Empty;
     }
-    private int GetGPULoad()
+    private int GetGPULoad(string gpuName)
     {
-        int loadValue = 0;
+        if(String.IsNullOrWhiteSpace(gpuName))
+        {
+            return 0;
+        }
 
         Computer computer= new Computer()
         {
             IsGpuEnabled = true
         };
-
         computer.Open();
 
-        foreach(var hardware in computer.Hardware)
+        var gpu = computer.Hardware.FirstOrDefault(h => h.Name == gpuName);
+        
+        if(gpu == null)
         {
-            if(hardware.HardwareType == HardwareType.GpuNvidia || hardware.HardwareType == HardwareType.GpuAmd || hardware.HardwareType == HardwareType.GpuIntel)
-            {
-                hardware.Update();
-                foreach(var sensor in hardware.Sensors)
-                {
-                    if(sensor.SensorType == SensorType.Load && sensor.Name.Contains("GPU Core"))
-                    {
-                        if(sensor.Value != null)
-                        {
-                            loadValue = (int)sensor.Value;
-                            break;
-                        }
-                    }
-                }
-                break;
-            }
+            computer.Close();
+            return 0;
+        }
+        
+        gpu.Update();
+
+        var loadSensor = gpu.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Load && s.Name.Contains("GPU Core"));
+
+        if(loadSensor == null || loadSensor.Value == null)
+        {
+            computer.Close();
+            return 0;
         }
 
-        return loadValue;
+        return (int)loadSensor.Value;
     }
 }

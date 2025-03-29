@@ -22,7 +22,8 @@ public class ApplicationSceneSwitcherScene : IEquatable<ApplicationSceneSwitcher
     public int SwitchingDelay { get; set; } = 0;
     public bool NeedsFocus { get; set; }
     public bool UseWindowTitleInsteadOfProcessName { get; set; }
-
+    public int GPULoadLimit { get; set; } = 0;
+    public string GPUName { get; set; } = string.Empty;
     public bool Equals(ApplicationSceneSwitcherScene? other)
     {
         if(other == null || other.Scene == null) return false;
