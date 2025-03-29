@@ -31,13 +31,23 @@ public class HardwareMonitoring : IDisposable
     {
         if(!_computer.IsGpuEnabled)
         {
-            return null;
+            SetGPUMonitoring(true);
         }
         if(String.IsNullOrWhiteSpace(gpuName))
         {
             return null;
         }
         return _computer.Hardware.FirstOrDefault(h => h.Name == gpuName);
+    }
+    public List<string> GetAllGPUs()
+    {
+        SetGPUMonitoring(true);
+        var gpuList = new List<string>();
+        gpuList.AddRange(_computer.Hardware.Where(h => 
+                            h.HardwareType == HardwareType.GpuAmd 
+                            || h.HardwareType == HardwareType.GpuNvidia
+                            || h.HardwareType == HardwareType.GpuIntel).Select(h => h.Name).ToList());
+        return gpuList;
     }
     public async Task<int> GetGPUCoreLoad(string gpuName)
     {
