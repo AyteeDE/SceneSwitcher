@@ -83,14 +83,33 @@
                 <Label Text="Needs focus" WidthRequest="150" VerticalOptions="Center" />
                 <CheckBox 
                     IsChecked="{Binding EditScene.NeedsFocus}"
-                    IsEnabled="{Binding IsEditEnabled}" />
+                    IsEnabled="{Binding IsEditEnabled}"
+                    IsVisible="{Binding IsVisibleOnWindows}" />
             </HorizontalStackLayout>
             <HorizontalStackLayout Spacing="50">
                 <Label Text="Use window title" WidthRequest="150" VerticalOptions="Center" />
                 <CheckBox 
                     IsChecked="{Binding EditScene.UseWindowTitleInsteadOfProcessName}"
-                    IsEnabled="{Binding IsEditEnabled}" />
+                    IsEnabled="{Binding IsEditEnabled}"
+                    IsVisible="{Binding IsVisibleOnWindows}" />
             </HorizontalStackLayout>
+            <VerticalStackLayout Spacing="10">
+                <Label Text="GPU load limit" />
+                <Entry
+                    Text="{Binding EditScene.GPULoadLimit}"
+                    WidthRequest="300"
+                    IsEnabled="{Binding IsEditEnabled}"
+                    IsVisible="{Binding IsVisibleOnWindows}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="10">
+                <Label Text="GPU name" />
+                <Picker 
+                    ItemsSource="{Binding AvailableGpus}"
+                    SelectedItem="{Binding EditScene.GPUName}"
+                    WidthRequest="300"
+                    IsEnabled="{Binding IsEditEnabled}"
+                    IsVisible="{Binding IsVisibleOnWindows}" />
+            </VerticalStackLayout>
             <Button
                 Text="Save"
                 FontSize="Title"

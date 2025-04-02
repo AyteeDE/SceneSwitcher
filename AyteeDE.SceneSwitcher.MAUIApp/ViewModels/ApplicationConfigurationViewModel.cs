@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using AyteeDE.SceneSwitcher.Configuration.Application;
+using AyteeDE.SceneSwitcher.Monitoring;
 using AyteeDE.StreamAdapter.Core.Communication;
 using AyteeDE.StreamAdapter.Core.Configuration;
 using AyteeDE.StreamAdapter.Core.Entities;
@@ -15,6 +16,7 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
     private EndpointConfiguration _endpointConfig;
     private List<Scene> _adapterScenes;
     private ObservableCollection<ApplicationSceneSwitcherSceneViewModel> _observableScenesList = new ObservableCollection<ApplicationSceneSwitcherSceneViewModel>();
+    private List<string> _availableGpus;
     public ApplicationConfigurationViewModel(ApplicationSceneSwitcherConfig applicationConfiguration, EndpointConfiguration endpointConfiguration)
     {
         _applicationConfig = applicationConfiguration;
@@ -25,6 +27,8 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
             Scenes.Add(sceneViewModel);
         }
         GetAdapterScenes();
+        HardwareMonitoring hardwareMonitoring = new HardwareMonitoring();
+        AvailableGpus = hardwareMonitoring.GetAllGPUs();
     }
     private async void GetAdapterScenes()
     {
@@ -86,7 +90,17 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(AdapterScenes));
         }
     }
+    public List<string> AvailableGpus
+    {
+        get => _availableGpus;
+        set
+        {
+            _availableGpus = value;
+            OnPropertyChanged(nameof(AvailableGpus));
+        }
+    }
     public bool IsEditEnabled => EditScene != null;
+    public bool IsVisibleOnWindows => SystemMonitoring.OS == PlatformID.Win32NT;
     public ICommand SaveCommand => new Command(SaveConfig);
     public ICommand AddNewRuleCommand => new Command(AddNewRule);
     public ICommand RemoveRuleCommand => new Command(RemoveRule);
@@ -103,7 +117,9 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
                 ProcessName = sceneViewModel.ProcessName,
                 Priority = sceneViewModel.Priority,
                 NeedsFocus = sceneViewModel.NeedsFocus,
-                UseWindowTitleInsteadOfProcessName = sceneViewModel.UseWindowTitleInsteadOfProcessName
+                UseWindowTitleInsteadOfProcessName = sceneViewModel.UseWindowTitleInsteadOfProcessName,
+                GPULoadLimit = sceneViewModel.GPULoadLimit,
+                GPUName = sceneViewModel.GPUName
             };
             scenesList.Add(scene);
         }

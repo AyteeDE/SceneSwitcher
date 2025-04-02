@@ -88,6 +88,30 @@ public class ApplicationSceneSwitcherSceneViewModel : INotifyPropertyChanged
             }
         }
     }
+    public int GPULoadLimit
+    {
+        get => _scene.GPULoadLimit;
+        set
+        {
+            if(_scene.GPULoadLimit != value)
+            {
+                _scene.GPULoadLimit = value;
+                OnPropertyChanged(nameof(GPULoadLimit));
+            }
+        }
+    }
+    public string GPUName
+    {
+        get => _scene.GPUName;
+        set
+        {
+            if(_scene.GPUName != value)
+            {
+                _scene.GPUName = value;
+                OnPropertyChanged(nameof(GPUName));
+            }
+        }
+    }
     public void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
