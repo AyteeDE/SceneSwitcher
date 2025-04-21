@@ -27,8 +27,12 @@ public class ApplicationConfigurationViewModel : INotifyPropertyChanged
             Scenes.Add(sceneViewModel);
         }
         GetAdapterScenes();
-        HardwareMonitoring hardwareMonitoring = new HardwareMonitoring();
-        AvailableGpus = hardwareMonitoring.GetAllGPUs();
+
+        if(IsVisibleOnWindows) // Library currently not working on macOS
+        {
+            HardwareMonitoring hardwareMonitoring = new HardwareMonitoring();
+            AvailableGpus = hardwareMonitoring.GetAllGPUs();
+        }
     }
     private async void GetAdapterScenes()
     {
